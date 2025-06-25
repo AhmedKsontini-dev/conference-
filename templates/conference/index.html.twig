@@ -1,0 +1,300 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Conférences{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <style>
+        .hero-section {
+            background: linear-gradient(rgba(44, 62, 80, 0.9), rgba(44, 62, 80, 0.9)), url('https://images.unsplash.com/photo-1505373877841-8d25f7d46678?ixlib=rb-4.0.3') center/cover;
+            padding: 100px 0;
+            color: white;
+            margin-bottom: 50px;
+        }
+        .conference-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        .conference-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .conference-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        .conference-date {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+        }
+        .conference-capacity {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(44, 62, 80, 0.9);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        .conference-details {
+            padding: 25px;
+        }
+        .conference-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+        .conference-description {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        .conference-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        .conference-location {
+            color: #666;
+            font-size: 0.9em;
+        }
+        .conference-location i {
+            color: var(--primary-color);
+            margin-right: 5px;
+        }
+        .btn-register {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+        .btn-register:hover {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        .swiper {
+            width: 100%;
+            height: 400px;
+            margin-bottom: 50px;
+        }
+        .swiper-slide {
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            position: relative;
+        }
+        .swiper-slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+        }
+        .swiper-content {
+            position: relative;
+            z-index: 1;
+            padding: 20px;
+        }
+        .featured-conference {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        .featured-description {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+        .search-section {
+            background-color: #f8f9fa;
+            padding: 30px 0;
+            margin-bottom: 50px;
+        }
+        .search-form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .search-input {
+            border-radius: 25px;
+            padding: 15px 25px;
+            border: 2px solid #eee;
+            width: 100%;
+            transition: border-color 0.3s ease;
+        }
+        .search-input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+        .section-title {
+            color: var(--primary-color);
+            font-size: 2em;
+            margin-bottom: 30px;
+            text-align: center;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background-color: var(--primary-color);
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    {# Section Hero avec Slider #}
+    <div class="swiper">
+        <div class="swiper-wrapper">
+            {% for conference in conferences|slice(0, 3) %}
+                <div class="swiper-slide" style="background-image: url('https://images.unsplash.com/photo-{{ loop.index == 1 ? '1505373877841-8d25f7d46678' : (loop.index == 2 ? '1540575468863-456599270836' : '1511795409834-ef04bbd61622') }}?ixlib=rb-4.0.3')">
+                    <div class="swiper-content">
+                        <h2 class="featured-conference">{{ conference.title }}</h2>
+                        <p class="featured-description">
+                            <i class="fas fa-map-marker-alt me-2"></i>{{ conference.location }}<br>
+                            <i class="fas fa-users me-2"></i>{{ conference.participants|length }}/{{ conference.maxCapacity }} participants
+                        </p>
+                        <a href="{{ path('app_conference_show', {'id': conference.id}) }}" class="btn btn-light btn-lg">En savoir plus</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="swiper-pagination"></div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </div>
+
+    {# Section de recherche #}
+    <section class="search-section">
+        <div class="container">
+            <form class="search-form" method="get">
+                <input type="text" name="search" class="search-input" placeholder="Rechercher une conférence..." value="{{ app.request.query.get('search') }}">
+            </form>
+        </div>
+    </section>
+
+    {# Section principale des conférences #}
+    <div class="container">
+        <h2 class="section-title">Nos Conférences</h2>
+        
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="fas fa-check-circle me-2"></i>
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+
+        {% for message in app.flashes('error') %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="fas fa-exclamation-circle me-2"></i>
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+
+        {% if is_granted('ROLE_ADMIN') %}
+            <div class="text-end mb-4">
+                <a href="{{ path('app_conference_new') }}" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>Nouvelle Conférence
+                </a>
+            </div>
+        {% endif %}
+
+        <div class="row">
+            {% for conference in conferences %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="conference-card">
+                        <div class="conference-image" style="background-image: url('https://images.unsplash.com/photo-{{ loop.index % 3 == 0 ? '1540575468863-456599270836' : (loop.index % 3 == 1 ? '1511795409834-ef04bbd61622' : '1505373877841-8d25f7d46678') }}?ixlib=rb-4.0.3')">
+                            
+                            <div class="conference-capacity">
+                                <i class="fas fa-users me-2"></i>
+                                {{ conference.participants|length }}/{{ conference.maxCapacity }}
+                            </div>
+                        </div>
+                        <div class="conference-details">
+                            <h3 class="conference-title">{{ conference.title }}</h3>
+                            <div class="conference-meta">
+                                <div class="conference-location">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    {{ conference.location }}
+                                </div>
+                                <div class="conference-date">
+                                    <i class="far fa-calendar-alt"></i>
+                                    {{ conference.date ? conference.date|date('d/m/Y') : '' }}
+                                </div>
+                            </div>
+                            
+                            <div class="text-end mt-3">
+                                <a href="{{ path('app_conference_show', {'id': conference.id}) }}" class="btn-register">
+                                    <i class="fas fa-arrow-right me-2"></i>Détails
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="col-12">
+                    <div class="alert alert-info text-center">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Aucune conférence trouvée.
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            new Swiper('.swiper', {
+                loop: true,
+                autoplay: {
+                    delay: 5000,
+                    disableOnInteraction: false,
+                },
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+            });
+        });
+    </script>
+{% endblock %}
