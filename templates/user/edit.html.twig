@@ -1,0 +1,259 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier l'utilisateur{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        :root {
+            --primary-color: #6c63ff;
+            --secondary-color: #4a45b1;
+            --accent-color: #ff6b6b;
+            --warning-color: #ffc107;
+            --dark-color: #2d3436;
+            --light-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+          
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            padding: 2rem 0;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            margin-top: 100px;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, transparent 100%);
+            z-index: 1;
+        }
+
+        .card {
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            margin-bottom: 2rem;
+            background: var(--card-bg);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-bottom: none;
+            padding: 1.5rem 2rem;
+        }
+
+        .card-body {
+            padding: 2rem;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: var(--dark-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control {
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            border: 1px solid #e0e0e0;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(108, 99, 255, 0.15);
+        }
+
+        .form-text {
+            font-size: 0.85rem;
+            color: #6c757d;
+            margin-top: 0.5rem;
+        }
+
+        .btn {
+            padding: 0.7rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+            border: none;
+        }
+
+        .btn i {
+            font-size: 0.9em;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+        }
+
+        .btn-primary:hover {
+            background-color: #5a52d4;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            transform: translateY(-2px);
+            color: white;
+        }
+
+        .form-errors {
+            color: #e74c3c;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        .password-requirements {
+            background-color: #f8f9fa;
+            border-left: 4px solid var(--primary-color);
+            padding: 1rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1rem 0;
+        }
+
+        .password-requirements h6 {
+            color: var(--dark-color);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .password-requirements ul {
+            margin-bottom: 0;
+            padding-left: 1.25rem;
+        }
+
+        .password-requirements li {
+            margin-bottom: 0.25rem;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <!-- En-tête -->
+        <div class="hero-section">
+            <div class="container position-relative" style="z-index: 2;">
+                <div class="d-flex justify-content-between align-items-center flex-wrap">
+                    <div>
+                        <h1 class="h2 mb-1 text-white">
+                            <i class="fas fa-user-edit me-2"></i>
+                            {{ form.vars.data.id ? 'Modifier l\'utilisateur' : 'Créer un utilisateur' }}
+                        </h1>
+                        <p class="mb-0 text-white-50">
+                            Gestion des informations de l'utilisateur
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="h4 mb-0 text-white">
+                            <i class="fas fa-user-cog me-2"></i>
+                            Informations de l'utilisateur
+                        </h2>
+                    </div>
+                    <div class="card-body">
+                        {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+                            <div class="mb-4">
+                                {{ form_label(form.email, 'Adresse email', {'label_attr': {'class': 'form-label'}}) }}
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                    {{ form_widget(form.email, {
+                                        'attr': {
+                                            'class': 'form-control' ~ (form.email.vars.errors|length ? ' is-invalid' : ''),
+                                            'placeholder': 'exemple@domaine.com'
+                                        }
+                                    }) }}
+                                </div>
+                                <div class="form-errors">
+                                    {{ form_errors(form.email) }}
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                {{ form_label(form.plainPassword, 'Mot de passe', {'label_attr': {'class': 'form-label'}}) }}
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                    {{ form_widget(form.plainPassword, {
+                                        'attr': {
+                                            'class': 'form-control' ~ (form.plainPassword.vars.errors|length ? ' is-invalid' : ''),
+                                            'autocomplete': 'new-password',
+                                            'placeholder': form.vars.data.id ? 'Laisser vide pour ne pas changer' : ''
+                                        }
+                                    }) }}
+                                </div>
+                                <div class="form-errors">
+                                    {{ form_errors(form.plainPassword) }}
+                                </div>
+                                
+                                {% if not form.vars.data.id %}
+                                    <div class="password-requirements mt-3">
+                                        <h6>Le mot de passe doit contenir :</h6>
+                                        <ul class="mb-0">
+                                            <li>Au moins 8 caractères</li>
+                                            <li>Au moins une majuscule (A-Z)</li>
+                                            <li>Au moins une minuscule (a-z)</li>
+                                            <li>Au moins un chiffre (0-9)</li>
+                                            <li>Au moins un caractère spécial (!@#$%^&*)</li>
+                                        </ul>
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center pt-3 border-top mt-4">
+                                <a href="{{ path('app_user_list') }}" class="btn btn-secondary">
+                                    <i class="fas fa-arrow-left me-2"></i> Retour à la liste
+                                </a>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save me-2"></i> Enregistrer
+                                </button>
+                            </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
